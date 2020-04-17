@@ -2,26 +2,35 @@ from LIF import LIF_Neuron
 import numpy as np
 import math
 
-
-inputNeuron = [LIF_Neuron()] * 2
-middleNeuron = [LIF_Neuron()] * 4
-
+# 2 input neurons, 1 for first num and another for second num
+inputNeurons = [LIF_Neuron()] * 2
+# 2 hidden neurons, one representing or and one representing nand
+middleNeurons = [LIF_Neuron()] * 2
+# 1 output neuron, fires high if XOR, fires low if !XOR
 outputNeuron = LIF_Neuron()
-alpha = .001
-decay = .00001
-weights = np.random.random(12)
 
-
+# Creating random initial weights
+weights = np.random.random(6)
+print("Initial random weights: " + weights)
+# Neuron 0 and 1 are input neurons. Neurons 2 and 3 are hidden layer neurons. Neuron 4 is the output neuron
+# Weights represent certain edges in this network:
+# 0 (0,2) input0 to OR
+# 1 (0,3) input0 to NAND
+# 2 (1,2) input1 to OR
+# 3 (1,3) input1 to NAND
+# 4 (2,4) OR to output
+# 5 (3,4) NAND to output
 
 # High input = 1 ???
 # Low input <= .5 ???
 lowInput = 2
 highInput = 7
 inputs = [.35] *2
-def train():
-    
 
-    for k in range (4):
+
+def train():
+
+    for k in range(4):
         if (k == 0):
             inputs[0] = lowInput
             inputs[1] = highInput
@@ -38,8 +47,7 @@ def train():
             inputs[0] = highInput
             inputs[1] = highInput
             trainingInput = -50
-   
-        
+
         for i in range(3000):
             
             # outputNeuron.runNeuron(trainingInput)
@@ -66,7 +74,7 @@ def train():
                         weights[i+8] -= decay 
 
 
-def test(x,y):
+def test(x, y):
     neuron1Fires = 0
     neuron2Fires = 0
     totalFires = 0
@@ -104,6 +112,8 @@ def test(x,y):
                 totalFires+=1
     
     return totalFires
+
+
 train()
 print(weights)
 print(test(0,0))
@@ -111,29 +121,6 @@ print(test(0,1))
 print(test(1,0))
 print(test(1,1))
 
-
-# from LIF import LIF_Neuron
-# import numpy as np
-# import math
-
-# # 2 input neurons, 1 for first num and another for second num
-# inputNeuron = [LIF_Neuron()] * 2
-
-# # 2 hidden neurons, one representing or and one representing nand
-# middleNeuron = [LIF_Neuron()] * 2
-
-# # 1 output neuron, fires high if XOR, fires low if !XOR
-# trainingNeuron = LIF_Neuron()
-# outputNeuron = LIF_Neuron()
-
-# weights = np.random.random(6)
-# print(weights)
-
-
-# # High input = 1 ???
-# # Low input <= .5 ???
-# lowInput = .35
-# highInput = 1
 
 # def train(input):
 #     for i in range(1000):

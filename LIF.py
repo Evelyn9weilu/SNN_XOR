@@ -1,11 +1,13 @@
 
 class LIF_Neuron():
+
     currCharge = 0
+
     def __init__(self):
         self.currCharge = 1
+
     def runNeuron(self, inputCharge):
-        
-        
+
         resistance = 100
         threshold = 10
         spike = 5
@@ -20,4 +22,5 @@ class LIF_Neuron():
             self.currCharge = C
             
             return True
+
         return False
