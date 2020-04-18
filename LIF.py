@@ -20,26 +20,26 @@ class LIF_Neuron():
     currentCharge = baseCharge
 
     # Constructor takes in initial input charge
-    def __init__(self, current):
-        self.inputCharge = current
+    def __init__(self):
+        return
 
     # Every call using .start() or next() will update the neuron charge
     # Neuron will check if it should spike
-    # If it has spiked, we yield a 1 and the current charge plus spike
+    # If it has spiked, we return a 1 and the current charge plus spike
     # otherwise we yield a 0 and the baseline charge
-    def start(self):
+    def run(self, inputCharge):
 
         # add dV to current charge, dv based on input charge and leak
-        self.currentCharge += self.dt * (self.inputCharge - (self.currentCharge / self.resistance)) / self.C
+        self.currentCharge += self.dt * (inputCharge - (self.currentCharge / self.resistance)) / self.C
 
         # Check if we have reached the threshold
         if self.currentCharge >= self.threshold:
+            outputCharge = self.currentCharge
             # resetting charge and spiking
             self.currentCharge = self.baseCharge
-            yield (1, self.currentCharge + self.spike)
+            return 1, outputCharge + self.spike
         else:
-
 
             # IF THIS DOESN'T WORK, TRY OUTPUTTING 90% OF THE PREVIOUS OUTPUT
 
-            yield (0, self.baseCharge)
+            return 0, self.baseCharge
