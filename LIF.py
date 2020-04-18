@@ -13,7 +13,7 @@ class LIF_Neuron():
     # spiking threshold
     threshold = 10
     # additional charge that results from passing threshold
-    spike = 5
+    spike = 1
 
     # dynamic LIF variables
     inputCharge = 0
@@ -38,8 +38,6 @@ class LIF_Neuron():
             # resetting charge and spiking
             self.currentCharge = self.baseCharge
             return 1, outputCharge + self.spike
+
         else:
-
-            # IF THIS DOESN'T WORK, TRY OUTPUTTING 90% OF THE PREVIOUS OUTPUT
-
             return 0, self.baseCharge
