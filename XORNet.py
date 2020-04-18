@@ -26,6 +26,9 @@ weights = np.random.random(6)
 print("Initial random weights: ")
 print(weights)
 
+# hardbound for weights
+WEIGHT_MAX = 1
+
 # Creating constants for our high and low inputs to represent 0 or 1
 LOW_INPUT = 2
 HIGH_INPUT = 11
@@ -35,7 +38,7 @@ inputs = [(0, 0), (0, 1), (1, 0), (1, 1)]
 
 # Constants for our weight change
 ALPHA = .0000002
-DECAY = .001
+DECAY = -100
 
 
 def train():
@@ -60,10 +63,10 @@ def train():
     neuron3training = 0
     neuron4training = 0
     FORCE_SPIKE = 20
-    PROHIBIT = -20
+    PROHIBIT = -30
 
-    # Train network 5,000 times
-    for j in range(5000):
+    # Train network 1,000 times
+    for j in range(1000):
         # Each iteration trains every possible input once
         for i in inputs:
             if i == (0, 0):
@@ -92,33 +95,39 @@ def train():
                 neuron4training = PROHIBIT
 
             # We find the activity in a 100 time unit interval
-            for k in range(100):
-                # adds 1 if the neuron spiked, adds 0 otherwise
-                neuron0activity += neuron0output[0]
-                neuron1activity += neuron1output[0]
+            # for k in range(100):
+            # adds 1 if the neuron spiked, adds 0 otherwise
+            neuron0activity += neuron0output[0]
+            neuron1activity += neuron1output[0]
 
-                # run the or neuron with current given by input neurons and training value
-                neuron2charge = neuron0output[1] * weights[0] + neuron1output[1] * weights[1] + neuron2training
-                neuron2output = middleNeuron2.run(neuron2charge)
-                neuron2activity += neuron2output[0]
+            # run the or neuron with current given by input neurons and training value
+            neuron2charge = neuron0output[1] * weights[0] + neuron1output[1] * weights[1] + neuron2training
+            neuron2output = middleNeuron2.run(neuron2charge)
+            neuron2activity += neuron2output[0]
 
-                # run the nand neuron with current given by input neurons and training value
-                neuron3charge = neuron0output[1] * weights[2] + neuron1output[1] * weights[3] + neuron3training
-                neuron3output = middleNeuron3.run(neuron3charge)
-                neuron3activity += neuron3output[0]
+            # run the nand neuron with current given by input neurons and training value
+            neuron3charge = neuron0output[1] * weights[2] + neuron1output[1] * weights[3] + neuron3training
+            neuron3output = middleNeuron3.run(neuron3charge)
+            neuron3activity += neuron3output[0]
 
-                # run the output neuron with current given by hidden neurons and training value
-                neuron4charge = neuron2output[1] * weights[4] + neuron3output[1] * weights[5] + neuron4training
-                neuron4output = outputNeuron.run(neuron4charge)
-                neuron4activity += neuron4output[0]
+            # run the output neuron with current given by hidden neurons and training value
+            neuron4charge = neuron2output[1] * weights[4] + neuron3output[1] * weights[5] + neuron4training
+            neuron4output = outputNeuron.run(neuron4charge)
+            neuron4activity += neuron4output[0]
 
-            # we now calculate weight adjustments based on activity of each neuron and constant decay
-            weights[0] += ALPHA * neuron0activity * neuron2activity + DECAY
-            weights[1] += ALPHA * neuron1activity * neuron2activity + DECAY
-            weights[2] += ALPHA * neuron0activity * neuron3activity + DECAY
-            weights[3] += ALPHA * neuron1activity * neuron3activity + DECAY
-            weights[4] += ALPHA * neuron2activity * neuron4activity + DECAY
-            weights[5] += ALPHA * neuron3activity * neuron4activity + DECAY
+            # we now calculate weight adjustments based on activity of each neuron and exponential decay
+            weights[0] += ALPHA * neuron0activity * neuron2activity + DECAY * weights[0]
+            weights[1] += ALPHA * neuron1activity * neuron2activity + DECAY * weights[1]
+            weights[2] += ALPHA * neuron0activity * neuron3activity + DECAY * weights[2]
+            weights[3] += ALPHA * neuron1activity * neuron3activity + DECAY * weights[3]
+            weights[4] += ALPHA * neuron2activity * neuron4activity + DECAY * weights[4]
+            weights[5] += ALPHA * neuron3activity * neuron4activity + DECAY * weights[5]
+
+            # Bounding our weights
+            for i in range(len(weights)):
+                if weights[i] >= WEIGHT_MAX:
+                    weights[i] = WEIGHT_MAX
+        print("finished training iteration ", j)
 
 
 # Runs the input 100 times to shown activity in a 100 time unit interval
