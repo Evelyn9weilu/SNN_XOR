@@ -14,8 +14,8 @@ import numpy as np
 # Creating random initial weights
 # Weights represent directed edges in this network:
 # 0 (0, 2) input0 to OR
-# 1 (1, 3) input1 to OR
-# 2 (0, 2) input0 to NAND
+# 1 (1, 2) input1 to OR
+# 2 (0, 3) input0 to NAND
 # 3 (1, 3) input1 to NAND
 # 4 (2, 4) OR to output
 # 5 (3, 4) NAND to output
