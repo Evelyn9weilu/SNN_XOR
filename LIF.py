@@ -3,7 +3,7 @@ class LIF_Neuron():
 
     # constant LIF properties
     # baseline charge when neuron is fully neutral
-    baseCharge = 1
+    baseCharge = 6
     # membrane capacitance
     C = 1
     # time interval for our neuron, based on neuron firing 200 times per sec

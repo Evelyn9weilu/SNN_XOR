@@ -1,0 +1,10 @@
+1. How would you represent the inputs using a temporal encoding?
+
+To represent the inputs we need two neurons, one for the x bit and one for the y bit. This encoding uses a time cycle, so a spike at one time means something different than a spike at another time. With the input 0, it will not spike at all, and with the input 1 it will spike at a specific time in the cycle.
+
+
+
+
+2. How would you represent the inputs using a firing rate encoding?
+
+We also need two neurons for this, one for the x bit and one for the y bit. If the bit is 0, it will not spike, and if the bit is 1 it will spike with a very high firing rate.

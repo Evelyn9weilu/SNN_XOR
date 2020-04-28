@@ -70,51 +70,62 @@ def train():
 
             # (0, 0)
             if i == 0:
-                neuron0output = inputNeuron0.run(LOW_INPUT)
-                neuron1output = inputNeuron1.run(LOW_INPUT)
+                # neuron0output = inputNeuron0.run(LOW_INPUT)
+                # neuron1output = inputNeuron1.run(LOW_INPUT)
+                neuron0charge = LOW_INPUT
+                neuron1charge = LOW_INPUT
                 neuron2training = PROHIBIT
                 neuron3training = FORCE_SPIKE * 2
                 neuron4training = PROHIBIT
             # (1, 1)
             elif i == 1:
-                neuron0output = inputNeuron0.run(HIGH_INPUT)
-                neuron1output = inputNeuron1.run(HIGH_INPUT)
+                # neuron0output = inputNeuron0.run(HIGH_INPUT)
+                # neuron1output = inputNeuron1.run(HIGH_INPUT)
+                neuron0charge = HIGH_INPUT
+                neuron1charge = HIGH_INPUT
                 neuron2training = FORCE_SPIKE
                 neuron3training = PROHIBIT
                 neuron4training = PROHIBIT
             # (0, 1)
             elif i == 2:
-                neuron0output = inputNeuron0.run(LOW_INPUT)
-                neuron1output = inputNeuron1.run(HIGH_INPUT)
+                # neuron0output = inputNeuron0.run(LOW_INPUT)
+                # neuron1output = inputNeuron1.run(HIGH_INPUT)
+                neuron0charge = LOW_INPUT
+                neuron1charge = HIGH_INPUT
                 neuron2training = FORCE_SPIKE
                 neuron3training = FORCE_SPIKE
                 neuron4training = FORCE_SPIKE
             # (1, 0)
             elif i == 3:
-                neuron0output = inputNeuron0.run(HIGH_INPUT)
-                neuron1output = inputNeuron1.run(LOW_INPUT)
+                # neuron0output = inputNeuron0.run(HIGH_INPUT)
+                # neuron1output = inputNeuron1.run(LOW_INPUT)
+                neuron0charge = HIGH_INPUT
+                neuron1charge = LOW_INPUT
                 neuron2training = FORCE_SPIKE
                 neuron3training = FORCE_SPIKE
                 neuron4training = FORCE_SPIKE
+            
 
             # We find the activity in a 100 time unit interval
             for k in range(100):
+                neuron0output = inputNeuron0.run(neuron0charge)
+                neuron1output = inputNeuron1.run(neuron1charge)
                 # adds 1 if the neuron spiked, adds 0 otherwise
                 neuron0activity += neuron0output[0]
                 neuron1activity += neuron1output[0]
-
+                
                 # run the or neuron with current given by input neurons and training value
-                neuron2charge = neuron0output[1] * weights[0] + neuron1output[1] * weights[1] + neuron2training
+                neuron2charge = (neuron0output[1] * weights[0]) + (neuron1output[1] * weights[1]) + neuron2training
                 neuron2output = middleNeuron2.run(neuron2charge)
                 neuron2activity += neuron2output[0]
 
                 # run the nand neuron with current given by input neurons and training value
-                neuron3charge = neuron0output[1] * weights[2] + neuron1output[1] * weights[3] + neuron3training
+                neuron3charge = (neuron0output[1] * weights[2]) + (neuron1output[1] * weights[3]) + neuron3training
                 neuron3output = middleNeuron3.run(neuron3charge)
                 neuron3activity += neuron3output[0]
 
                 # run the output neuron with current given by hidden neurons and training value
-                neuron4charge = neuron2output[1] * weights[4] + neuron3output[1] * weights[5] + neuron4training
+                neuron4charge = (neuron2output[1] * weights[4]) + (neuron3output[1] * weights[5]) + neuron4training
                 neuron4output = outputNeuron.run(neuron4charge)
                 neuron4activity += neuron4output[0]
 
@@ -177,7 +188,7 @@ def test(x, y):
 
     totalSpikes = 0
 
-    for i in range(100):
+    for i in range(5000):
 
         neuron0current = 0
         neuron1current = 0
@@ -199,7 +210,7 @@ def test(x, y):
         neuron2spikes += neuron2output[0]
         neuron2current = neuron2output[1]
 
-        neuron3output = middleNeuron3.run(neuron0current * weights[2] + neuron1current * weights[3])
+        neuron3output = middleNeuron3.run(10-(neuron0current * weights[2] + neuron1current * weights[3]))
         neuron3spikes += neuron3output[0]
         neuron3current = neuron3output[1]
 
