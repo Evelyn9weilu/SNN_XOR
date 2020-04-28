@@ -27,12 +27,12 @@ print(weights)
 WEIGHT_MAX = 1
 
 # Creating constants for our high and low inputs to represent 0 or 1
-LOW_INPUT = 0
-HIGH_INPUT = 11
+LOW_INPUT = 2
+HIGH_INPUT = 10
 
 # Constants for our weight change
 ALPHA = .15
-DECAY = .003
+DECAY = .002
 
 
 def train():
@@ -53,12 +53,13 @@ def train():
     # Train network with this many iterations
     for j in range(1000):
 
-        print("starting training iteration ", j)
-        print(weights)
+        # print("starting training iteration ", j)
+        # print(weights)
 
         # Each iteration trains every possible input once
         for i in range(4):
 
+            # We find the activity in a 100 time unit interval
             neuron0output = 0
             neuron1output = 0
 
@@ -73,31 +74,30 @@ def train():
                 neuron0output = inputNeuron0.run(LOW_INPUT)
                 neuron1output = inputNeuron1.run(LOW_INPUT)
                 neuron2training = PROHIBIT
-                neuron3training = FORCE_SPIKE * 2
-                neuron4training = PROHIBIT
+                neuron3training = FORCE_SPIKE
+                neuron4training = PROHIBIT * 2
             # (1, 1)
             elif i == 1:
                 neuron0output = inputNeuron0.run(HIGH_INPUT)
                 neuron1output = inputNeuron1.run(HIGH_INPUT)
                 neuron2training = FORCE_SPIKE
-                neuron3training = PROHIBIT
-                neuron4training = PROHIBIT
+                neuron3training = FORCE_SPIKE
+                neuron4training = FORCE_SPIKE
             # (0, 1)
             elif i == 2:
                 neuron0output = inputNeuron0.run(LOW_INPUT)
                 neuron1output = inputNeuron1.run(HIGH_INPUT)
                 neuron2training = FORCE_SPIKE
-                neuron3training = FORCE_SPIKE
-                neuron4training = FORCE_SPIKE
+                neuron3training = PROHIBIT
+                neuron4training = PROHIBIT
             # (1, 0)
             elif i == 3:
                 neuron0output = inputNeuron0.run(HIGH_INPUT)
                 neuron1output = inputNeuron1.run(LOW_INPUT)
                 neuron2training = FORCE_SPIKE
-                neuron3training = FORCE_SPIKE
-                neuron4training = FORCE_SPIKE
+                neuron3training = PROHIBIT
+                neuron4training = PROHIBIT
 
-            # We find the activity in a 100 time unit interval
             for k in range(100):
                 # adds 1 if the neuron spiked, adds 0 otherwise
                 neuron0activity += neuron0output[0]
@@ -128,30 +128,30 @@ def train():
             # weight adjustments
             # we now calculate weight adjustments based on activity of each neuron and exponential decay
 
-            print("weight adjustments")
+            # print("weight adjustments")
 
             weight0dw = ALPHA * neuron0activity * neuron2activity - DECAY * weights[0]
-            print(weight0dw)
+            # print(weight0dw)
             weights[0] += weight0dw
 
             weight1dw = ALPHA * neuron1activity * neuron2activity - DECAY * weights[1]
-            print(weight1dw)
+            # print(weight1dw)
             weights[1] += weight1dw
 
             weight2dw = ALPHA * neuron0activity * neuron3activity - DECAY * weights[2]
-            print(weight2dw)
+            # print(weight2dw)
             weights[2] += weight2dw
 
             weight3dw = ALPHA * neuron1activity * neuron3activity - DECAY * weights[3]
-            print(weight3dw)
+            # print(weight3dw)
             weights[3] += weight3dw
 
             weight4dw = ALPHA * neuron2activity * neuron4activity - DECAY * weights[4]
-            print(weight4dw)
+            # print(weight4dw)
             weights[4] += weight4dw
 
             weight5dw = ALPHA * neuron3activity * neuron4activity - DECAY * weights[5]
-            print(weight5dw)
+            # print(weight5dw)
             weights[5] += weight5dw
 
             # Bounding our weights
@@ -199,7 +199,7 @@ def test(x, y):
         neuron2spikes += neuron2output[0]
         neuron2current = neuron2output[1]
 
-        neuron3output = middleNeuron3.run(neuron0current * weights[2] + neuron1current * weights[3])
+        neuron3output = middleNeuron3.run(8 - (neuron0current * weights[2] + neuron1current * weights[3]))
         neuron3spikes += neuron3output[0]
         neuron3current = neuron3output[1]
 
