@@ -27,11 +27,11 @@ print(weights)
 WEIGHT_MAX = 1
 
 # Creating constants for our high and low inputs to represent 0 or 1
-LOW_INPUT = 2
-HIGH_INPUT = 10
+LOW_INPUT = 1
+HIGH_INPUT = 9
 
 # Constants for our weight change
-ALPHA = .15
+ALPHA = .175
 DECAY = .002
 
 
@@ -47,8 +47,8 @@ def train():
     neuron2training = 0
     neuron3training = 0
     neuron4training = 0
-    FORCE_SPIKE = 100
-    PROHIBIT = -200
+    FORCE_SPIKE = 1000
+    PROHIBIT = -2000
 
     # Train network with this many iterations
     for j in range(1000):
@@ -88,14 +88,14 @@ def train():
                 neuron0output = inputNeuron0.run(LOW_INPUT)
                 neuron1output = inputNeuron1.run(HIGH_INPUT)
                 neuron2training = FORCE_SPIKE
-                neuron3training = PROHIBIT
+                neuron3training = FORCE_SPIKE
                 neuron4training = PROHIBIT
             # (1, 0)
             elif i == 3:
                 neuron0output = inputNeuron0.run(HIGH_INPUT)
                 neuron1output = inputNeuron1.run(LOW_INPUT)
                 neuron2training = FORCE_SPIKE
-                neuron3training = PROHIBIT
+                neuron3training = FORCE_SPIKE
                 neuron4training = PROHIBIT
 
             for k in range(100):
@@ -199,7 +199,7 @@ def test(x, y):
         neuron2spikes += neuron2output[0]
         neuron2current = neuron2output[1]
 
-        neuron3output = middleNeuron3.run(8 - (neuron0current * weights[2] + neuron1current * weights[3]))
+        neuron3output = middleNeuron3.run(14 - (neuron0current * weights[2] + neuron1current * weights[3]))
         neuron3spikes += neuron3output[0]
         neuron3current = neuron3output[1]
 
