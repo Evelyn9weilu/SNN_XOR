@@ -73,7 +73,7 @@ def train():
                 neuron0output = inputNeuron0.run(LOW_INPUT)
                 neuron1output = inputNeuron1.run(LOW_INPUT)
                 neuron2training = PROHIBIT
-                neuron3training = FORCE_SPIKE
+                neuron3training = FORCE_SPIKE * 2
                 neuron4training = PROHIBIT
             # (1, 1)
             elif i == 1:
