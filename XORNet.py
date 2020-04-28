@@ -31,8 +31,8 @@ LOW_INPUT = 0
 HIGH_INPUT = 11
 
 # Constants for our weight change
-ALPHA = .1
-DECAY = .001
+ALPHA = .15
+DECAY = .003
 
 
 def train():
@@ -47,10 +47,10 @@ def train():
     neuron2training = 0
     neuron3training = 0
     neuron4training = 0
-    FORCE_SPIKE = 20
-    PROHIBIT = -50
+    FORCE_SPIKE = 100
+    PROHIBIT = -200
 
-    # Train network 1,000 times
+    # Train network with this many iterations
     for j in range(1000):
 
         print("starting training iteration ", j)
@@ -68,30 +68,34 @@ def train():
             neuron3activity = 0
             neuron4activity = 0
 
+            # (0, 0)
             if i == 0:
                 neuron0output = inputNeuron0.run(LOW_INPUT)
                 neuron1output = inputNeuron1.run(LOW_INPUT)
                 neuron2training = PROHIBIT
                 neuron3training = FORCE_SPIKE
                 neuron4training = PROHIBIT
-            elif i == i:
-                neuron0output = inputNeuron0.run(LOW_INPUT)
-                neuron1output = inputNeuron1.run(HIGH_INPUT)
-                neuron2training = FORCE_SPIKE
-                neuron3training = FORCE_SPIKE
-                neuron4training = FORCE_SPIKE
-            elif i == 2:
-                neuron0output = inputNeuron0.run(HIGH_INPUT)
-                neuron1output = inputNeuron1.run(LOW_INPUT)
-                neuron2training = FORCE_SPIKE
-                neuron3training = FORCE_SPIKE
-                neuron4training = FORCE_SPIKE
-            elif i == 3:
+            # (1, 1)
+            elif i == 1:
                 neuron0output = inputNeuron0.run(HIGH_INPUT)
                 neuron1output = inputNeuron1.run(HIGH_INPUT)
                 neuron2training = FORCE_SPIKE
                 neuron3training = PROHIBIT
                 neuron4training = PROHIBIT
+            # (0, 1)
+            elif i == 2:
+                neuron0output = inputNeuron0.run(LOW_INPUT)
+                neuron1output = inputNeuron1.run(HIGH_INPUT)
+                neuron2training = FORCE_SPIKE
+                neuron3training = FORCE_SPIKE
+                neuron4training = FORCE_SPIKE
+            # (1, 0)
+            elif i == 3:
+                neuron0output = inputNeuron0.run(HIGH_INPUT)
+                neuron1output = inputNeuron1.run(LOW_INPUT)
+                neuron2training = FORCE_SPIKE
+                neuron3training = FORCE_SPIKE
+                neuron4training = FORCE_SPIKE
 
             # We find the activity in a 100 time unit interval
             for k in range(100):
@@ -167,8 +171,9 @@ def test(x, y):
     middleNeuron3 = LIF_Neuron()
     outputNeuron = LIF_Neuron()
 
-    neuron0spikes = 0
-    neuron1spikes = 0
+    # TESTING ONLY REMOVE LATER
+    neuron2spikes = 0
+    neuron3spikes = 0
 
     totalSpikes = 0
 
@@ -190,12 +195,20 @@ def test(x, y):
             neuron0current = inputNeuron0.run(HIGH_INPUT)[1]
             neuron1current = inputNeuron1.run(HIGH_INPUT)[1]
 
-        neuron2current = middleNeuron2.run(neuron0current * weights[0] + neuron1current * weights[1])[1]
-        neuron3current = middleNeuron3.run(neuron0current * weights[2] + neuron1current * weights[3])[1]
+        neuron2output = middleNeuron2.run(neuron0current * weights[0] + neuron1current * weights[1])
+        neuron2spikes += neuron2output[0]
+        neuron2current = neuron2output[1]
+
+        neuron3output = middleNeuron3.run(neuron0current * weights[2] + neuron1current * weights[3])
+        neuron3spikes += neuron3output[0]
+        neuron3current = neuron3output[1]
+
         neuron4spikes = outputNeuron.run(neuron2current * weights[4] + neuron3current * weights[5])[0]
         totalSpikes += neuron4spikes
 
-    return totalSpikes
+    # TESTING ONLY REMOVE LATER
+    return neuron2spikes, neuron3spikes, totalSpikes
+    # return totalSpikes
 
 
 train()
