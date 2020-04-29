@@ -3,13 +3,13 @@ class LIF_Neuron():
 
     # constant LIF properties
     # baseline charge when neuron is fully neutral
-    baseCharge = 1
+    baseCharge = 4
     # membrane capacitance
     C = 1
     # time interval for our neuron, based on neuron firing 200 times per sec
     dt = 1
     # neuron resistance
-    resistance = 12
+    resistance = 16
     # spiking threshold
     threshold = 10
     # additional charge that results from passing threshold
