@@ -2,23 +2,18 @@ from LIF import LIF_Neuron
 import numpy as np
 
 # Neuron 0 and 1 are input neurons. Neurons 2 and 3 are hidden layer neurons. Neuron 4 is the output neuron
-# # 2 input neurons, 1 for first num and another for second num
-# inputNeuron0 = None
-# inputNeuron1 = None
-# # 2 hidden neurons, one representing or and one representing nand
-# middleNeuron2 = None
-# middleNeuron3 = None
-# # 1 output neuron, fires high if XOR, fires low if !XOR
-# outputNeuron = None
+# 2 input neurons, 1 for first num and another for second num
+# 2 hidden neurons
+# 1 output neuron, fires high if XOR, fires low if !XOR
 
 # Creating random initial weights
 # Weights represent directed edges in this network:
-# 0 (0, 2) input0 to OR
-# 1 (1, 2) input1 to OR
-# 2 (0, 3) input0 to NAND
-# 3 (1, 3) input1 to NAND
-# 4 (2, 4) OR to output
-# 5 (3, 4) NAND to output
+# 0 (0, 2) input0 to first hidden neuron
+# 1 (1, 2) input1 to first hidden neuron
+# 2 (0, 3) input0 to second hidden neuron
+# 3 (1, 3) input1 to second hidden neuron
+# 4 (2, 4) first hidden neuron to output
+# 5 (3, 4) second hidden neuron to output
 weights = np.random.random(6)
 print("Initial random weights: ")
 print(weights)
@@ -171,10 +166,6 @@ def test(x, y):
     middleNeuron3 = LIF_Neuron()
     outputNeuron = LIF_Neuron()
 
-    # TESTING ONLY REMOVE LATER
-    neuron2spikes = 0
-    neuron3spikes = 0
-
     totalSpikes = 0
 
     for i in range(100):
@@ -196,18 +187,16 @@ def test(x, y):
             neuron1current = inputNeuron1.run(HIGH_INPUT)[1]
 
         neuron2output = middleNeuron2.run(neuron0current * weights[0] + neuron1current * weights[1])
-        neuron2spikes += neuron2output[0]
         neuron2current = neuron2output[1]
 
         neuron3output = middleNeuron3.run(14 - (neuron0current * weights[2] + neuron1current * weights[3]))
-        neuron3spikes += neuron3output[0]
         neuron3current = neuron3output[1]
 
         neuron4spikes = outputNeuron.run(neuron2current * weights[4] + neuron3current * weights[5])[0]
         totalSpikes += neuron4spikes
 
     # TESTING ONLY REMOVE LATER
-    return neuron2spikes, neuron3spikes, totalSpikes
+    return totalSpikes
     # return totalSpikes
 
 
@@ -215,8 +204,9 @@ train()
 print("Trained weights")
 print(weights)
 
-print("Running values for (0, 0), (0, 1), (1, 0), (1, 1)")
-print(test(0, 0))
-print(test(0, 1))
-print(test(1, 0))
-print(test(1, 1))
+print("\nFinding spikes rates in a 100 time unit interval")
+print("Expected results for a working xor network is significant spike rate difference between 0 and 1 outputs.")
+print("(0, 0): " + str(test(0, 0)))
+print("(0, 1): " + str(test(0, 1)))
+print("(1, 0): " + str(test(1, 0)))
+print("(1, 1): " + str(test(1, 1)))
